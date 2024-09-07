@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "snake.h"
-#include "border.h"
+#include "board.h"
+#include <stdbool.h>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 700
@@ -12,19 +13,19 @@ struct game{
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
     Snake *pSnake;
-    Border *pBorder;
+    Board *pBoard;
 };
 typedef struct game Game;
 
 int initiate(Game *pGame);
+void run_game(Game *pGame);
 void close(Game *pGame);
 
 int main(int argc, char *argv[]){
 
     Game g={0};
     if(!initiate(&g)) return 1;
-    // run(&g);
-    SDL_Delay(5000);
+    run_game(&g);
     close(&g);
     printf("SUCCESS!!");
     return 0;
@@ -49,6 +50,50 @@ int initiate(Game *pGame){
         close(pGame);
         return 0;
     }   
+
+    pGame->pBoard = createBoard(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    //     bool runing =true;
+    // while (runing)
+    // {
+    //     SDL_Event event;
+    //     SDL_Rect rect;
+        
+    //     while (SDL_PollEvent(&event))
+    //     {
+    //         if(event.type == 0x100)
+    //             runing = false;
+    //     }
+    //     rect.h = WINDOW_HEIGHT-150;
+    //     rect.w = WINDOW_WIDTH-150;
+    //     rect.y = (WINDOW_WIDTH/2)-(rect.w/2);
+    //     rect.x = (WINDOW_HEIGHT/2)- (rect.h/2);
+    //     SDL_SetRenderDrawColor(pGame->pRenderer, 0, 0, 0, 255);
+    //     SDL_RenderClear(pGame->pRenderer);
+
+    //     SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
+    //     SDL_RenderDrawRect(pGame->pRenderer, &rect);
+    //     SDL_RenderPresent(pGame->pRenderer);        
+    // }
+}
+void run_game(Game *pGame)
+{
+    int close_requested = 0;
+    SDL_Event eventGame;
+    while (!close_requested){
+        while(SDL_PollEvent(&eventGame)){
+            if(eventGame.type == SDL_QUIT) close_requested = 1;
+            // else handleInput(pGame, &eventGame);
+        }
+        
+        SDL_SetRenderDrawColor(pGame->pRenderer, 0, 0, 0, 255);
+        SDL_RenderClear(pGame->pRenderer);
+
+        SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
+        drawBoard(pGame->pBoard);
+        SDL_RenderPresent(pGame->pRenderer); 
+    }
+    
 }
 
 void close(Game *pGame)
