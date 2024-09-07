@@ -7,7 +7,14 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 700
+/*
+TODO: create function createSnake and drawSnake
+        write the functions in snake.c and snake.h file
+        link the snake.c and snake.h in the make file
 
+TODO: write the handle inputs
+TODO: check if you need the SDL_Surface and textrs
+*/ 
 
 struct game{
     SDL_Window *pWindow;
@@ -52,29 +59,7 @@ int initiate(Game *pGame){
     }   
 
     pGame->pBoard = createBoard(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-    //     bool runing =true;
-    // while (runing)
-    // {
-    //     SDL_Event event;
-    //     SDL_Rect rect;
-        
-    //     while (SDL_PollEvent(&event))
-    //     {
-    //         if(event.type == 0x100)
-    //             runing = false;
-    //     }
-    //     rect.h = WINDOW_HEIGHT-150;
-    //     rect.w = WINDOW_WIDTH-150;
-    //     rect.y = (WINDOW_WIDTH/2)-(rect.w/2);
-    //     rect.x = (WINDOW_HEIGHT/2)- (rect.h/2);
-    //     SDL_SetRenderDrawColor(pGame->pRenderer, 0, 0, 0, 255);
-    //     SDL_RenderClear(pGame->pRenderer);
-
-    //     SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
-    //     SDL_RenderDrawRect(pGame->pRenderer, &rect);
-    //     SDL_RenderPresent(pGame->pRenderer);        
-    // }
+    
 }
 void run_game(Game *pGame)
 {
