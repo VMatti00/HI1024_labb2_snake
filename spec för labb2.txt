@@ -1,3 +1,4 @@
-Snake
+The game will feature a course where the player controls a snake that navigates towards "food." When the snake reaches the food, the player earns points, and the snake grows longer.
 
-player vs computer.
+Twist:
+There will also be a computer-controlled snake with the same goal as the player's snake: to eat food, grow larger, and dominate the snake world.
