@@ -14,7 +14,7 @@ main.o: $(SRCDIR)/main.c
 board.o: $(SRCDIR)/board.c $(INCDIR)/board.h
 	$(CC) $(CFLAGS) $(SRCDIR)/board.c
 
-snake.o: $(SRCDIR)/snake.c $(INCDIR)/snake.h
+snake.o: $(SRCDIR)/snake.c $(INCDIR)/snake.h 
 	$(CC) $(CFLAGS) $(SRCDIR)/snake.c
 
 clean:

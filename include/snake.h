@@ -2,14 +2,15 @@
 #define snake_h
 
 typedef struct snake Snake;
+typedef struct snake_segment SnakeSegment;
+typedef struct board Board;
 
-Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height);
-void updateSnake(Snake *pSnake);
-
+Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y);
+void updateSnake(Snake *pSnake, Board *pBoard);
 void drawSnake(Snake *pSnake);
 void accelerate(Snake *pSnake);
 void turnRight(Snake *pSnake);
 void turnLeft(Snake *pSnake);
-
+void accelerateDown(Snake *pSnake);
 
 #endif

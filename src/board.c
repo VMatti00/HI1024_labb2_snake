@@ -29,3 +29,9 @@ void drawBoard(Board *pBoard)
 {
     SDL_RenderDrawRect(pBoard->pRenderer, &pBoard->rect);
 }
+
+// getBord dimnesions w h x y
+int getBoardWidth(Board *pBoard)
+{
+    return pBoard->rect.w;
+}
