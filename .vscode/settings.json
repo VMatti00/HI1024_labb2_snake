@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "board.h": "c"
+        "board.h": "c",
+        "snake.h": "c",
+        "sdl_image.h": "c"
     }
 }
