@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_error.h>
 #include "snake.h"
 #include "board.h"
 #include "food.h"
@@ -70,7 +71,7 @@ int initiate(Game *pGame)
 
     pGame->pBoard = createBoard(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     pGame->pSnake = createSnake(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    pGame->pFood = createFood(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+    pGame->pFood = createFood(pGame->pRenderer, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
     pGame->score = 0;
 
     return 1;
@@ -89,16 +90,13 @@ void run_game(Game *pGame)
             else handleInput(pGame, &eventGame);
         }
         updateSnake(pGame->pSnake, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
-        SDL_Rect snakeHead = pGame->pSnake->pHead->rect;
+        SDL_Rect snakeHeadRect = pGame->pSnake->pHead->rect;
         SDL_Rect foodRect = pGame->pFood->rect;
-        if(checkCollision(snakeHead, foodRect)){
-            printf("Collision detected\n");
-            growSnake(pGame->pSnake);
-            repositionFood(pGame->pFood, WINDOW_WIDTH, WINDOW_HEIGHT);
-            pGame->score++;
-            printf("Score: %d\n", pGame->score);
-            
 
+        if(checkCollision(snakeHeadRect, foodRect)){
+            growSnake(pGame->pSnake);
+            repositionFood(pGame->pFood, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
+            pGame->score++;
         }
         // printf("Snake x: %d, y: %d\n", pGame->pSnake->pHead->rect.x, pGame->pSnake->pHead->rect.y);
 

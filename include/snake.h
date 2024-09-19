@@ -3,7 +3,7 @@
 
 typedef struct snake_segment{
 
-    SDL_Rect rect;
+    SDL_Rect rect; 
     struct snake_segment *pNext;
 }SnakeSegment;
 
@@ -11,13 +11,10 @@ typedef struct snake_segment{
 typedef struct snake{
     float x, y, vy, vx;
     int length;
-    // int angle;
     int window_width,window_height;
     SnakeSegment *pHead;
     SnakeSegment *pTail;
     SDL_Renderer *pRenderer;
-    // SDL_Rect rect;
-    // SDL_Surface *pSurface;
 }Snake;
 
 // typedef struct snake_segment SnakeSegment;

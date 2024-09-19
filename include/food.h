@@ -7,9 +7,9 @@ typedef struct food
     SDL_Rect rect;
 }Food;
 
-Food *createFood(SDL_Renderer *pRenderer, int window_width, int window_height);
+Food *createFood(SDL_Renderer *pRenderer, int board_width, int board_height, int board_x, int board_y);
 void drawFood(Food *pFood);
-void repositionFood(Food *pFood, int window_width, int window_height);
+void repositionFood(Food *pFood, int board_width, int board_height, int board_x, int board_y);
 
 
 

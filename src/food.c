@@ -7,7 +7,7 @@
 
 
 
-Food *createFood(SDL_Renderer *pRenderer, int window_width, int window_height){
+Food *createFood(SDL_Renderer *pRenderer, int board_width, int board_height, int board_x, int board_y){
     Food *pFood = malloc(sizeof(struct food));
     if (!pFood) {
         printf("Failed to allocate memory for food\n");
@@ -16,7 +16,7 @@ Food *createFood(SDL_Renderer *pRenderer, int window_width, int window_height){
     pFood->rect.h = 20;
     pFood->rect.w = 20;
     pFood->pRenderer = pRenderer;
-    repositionFood(pFood, window_width, window_height);
+    repositionFood(pFood,  board_width,  board_height,  board_x,  board_y);
     return pFood;
 }
 
@@ -25,8 +25,11 @@ void drawFood(Food *pFood){
     SDL_RenderFillRect(pFood->pRenderer, &pFood->rect);
 }
 
-void repositionFood(Food *pFood, int window_width, int window_height){
+void repositionFood(Food *pFood, int board_width, int board_height, int board_x, int board_y){
     srand(time(NULL));
-    pFood->rect.x = (rand() % (window_width - 200));
-    pFood->rect.y = (rand() % (window_height - 200));
+    // pFood->rect.x = (rand() % (board_width+25) - board_x +1 ) + board_x;
+    // pFood->rect.y = (rand() % (board_height+25) - board_y +1 ) + board_y;
+    pFood->rect.x = (rand() % (board_width - 20) + board_x + 1);
+    pFood->rect.y = (rand() % (board_height - 20) + board_y + 1);
+    
 }
