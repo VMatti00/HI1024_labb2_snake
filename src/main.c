@@ -9,6 +9,10 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 700
+
+// #define WINDOW_WIDTH 500
+// #define WINDOW_HEIGHT 500
+
 /*
 TODO: create function createSnake and drawSnake
         write the functions in snake.c and snake.h file
@@ -23,6 +27,7 @@ struct game
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
     Snake *pSnake;
+    Snake *pSnakeAI;
     Board *pBoard;
     Food *pFood;
     // SDL_Rect gameRect;
@@ -71,11 +76,13 @@ int initiate(Game *pGame)
 
     pGame->pBoard = createBoard(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT);
     pGame->pSnake = createSnake(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    pGame->pSnakeAI = createSnake(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
     pGame->pFood = createFood(pGame->pRenderer, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
     pGame->score = 0;
 
     return 1;
 }
+
 void run_game(Game *pGame)
 {
     int close_requested = 0;
@@ -87,16 +94,34 @@ void run_game(Game *pGame)
         while (SDL_PollEvent(&eventGame)){
             printf("Polling event\n");
             if (eventGame.type == SDL_QUIT) close_requested = 1;
-            else handleInput(pGame, &eventGame);
+            else 
+            {
+                handleInput(pGame, &eventGame);
+            }
         }
-        updateSnake(pGame->pSnake, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
+        if(!updateSnake(pGame->pSnake, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
+            printf("Game over\n");
+            break;
+        }
+        moveSnakeAI(pGame->pSnakeAI, foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
+        printf("%d %d %d %d %d %d\n",foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
+        
+        if(!updateSnake(pGame->pSnakeAI, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
+            printf("Game over\n");
+            break;
+        }
+        // updateSnake(pGame->pSnake, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
+        SDL_Rect snakeHeadRectAI = pGame->pSnakeAI->pHead->rect;
         SDL_Rect snakeHeadRect = pGame->pSnake->pHead->rect;
         SDL_Rect foodRect = pGame->pFood->rect;
-
         if(checkCollision(snakeHeadRect, foodRect)){
             growSnake(pGame->pSnake);
             repositionFood(pGame->pFood, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
-            pGame->score++;
+            // pGame->score++;
+        }
+        else if(checkCollision(snakeHeadRectAI, foodRect)){
+            growSnake(pGame->pSnakeAI);
+            repositionFood(pGame->pFood, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
         }
         // printf("Snake x: %d, y: %d\n", pGame->pSnake->pHead->rect.x, pGame->pSnake->pHead->rect.y);
 
@@ -108,6 +133,7 @@ void run_game(Game *pGame)
         printf("Drawing board\n");
         // SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
         drawBoard(pGame->pBoard);
+        drawSnake(pGame->pSnakeAI);
         drawSnake(pGame->pSnake);
         drawFood(pGame->pFood);
 
@@ -115,6 +141,9 @@ void run_game(Game *pGame)
         SDL_Delay(16);
     }
 }
+
+
+
 void handleInput(Game *pGame, SDL_Event *pEvent)
 {
     if (pEvent->type == SDL_KEYDOWN)
