@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
+#include <time.h>
 #include "snake.h"
 #include "board.h"
 #include "food.h"
@@ -9,7 +10,6 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 700
-
 // #define WINDOW_WIDTH 500
 // #define WINDOW_HEIGHT 500
 
@@ -21,6 +21,7 @@ TODO: create function createSnake and drawSnake
 TODO: write the handle inputs
 TODO: check if you need the SDL_Surface and textrs
 */
+
 
 struct game
 {
@@ -85,14 +86,14 @@ int initiate(Game *pGame)
 
 void run_game(Game *pGame)
 {
+    srand(time(NULL));
+
     int close_requested = 0;
     SDL_Event eventGame;
     
 
     while (!close_requested){
-        printf("Running game\n");
         while (SDL_PollEvent(&eventGame)){
-            printf("Polling event\n");
             if (eventGame.type == SDL_QUIT) close_requested = 1;
             else 
             {
@@ -104,8 +105,8 @@ void run_game(Game *pGame)
             break;
         }
         moveSnakeAI(pGame->pSnakeAI, foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
-        printf("%d %d %d %d %d %d\n",foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
-        
+        printf("FOODXY: %d, %d\n",foodX(pGame->pFood), foodY(pGame->pFood));
+        printf("SNAKEXY: %d, %d\n",pGame->pSnakeAI->pHead->rect.x, pGame->pSnakeAI->pHead->rect.y);
         if(!updateSnake(pGame->pSnakeAI, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
             printf("Game over\n");
             break;
@@ -130,7 +131,6 @@ void run_game(Game *pGame)
 
 
 
-        printf("Drawing board\n");
         // SDL_SetRenderDrawColor(pGame->pRenderer, 255, 255, 255, 255);
         drawBoard(pGame->pBoard);
         drawSnake(pGame->pSnakeAI);

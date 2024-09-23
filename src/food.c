@@ -26,10 +26,10 @@ void drawFood(Food *pFood){
 }
 
 void repositionFood(Food *pFood, int board_width, int board_height, int board_x, int board_y){
-    srand(time(NULL));
+    
     // pFood->rect.x = (rand() % (board_width+25) - board_x +1 ) + board_x;
     // pFood->rect.y = (rand() % (board_height+25) - board_y +1 ) + board_y;
-    pFood->rect.x = (rand() % (board_width - 20) + board_x + 1);
+    pFood->rect.x = (rand() % (board_width +20) + board_x + 1);
     pFood->rect.y = (rand() % (board_height - 20) + board_y + 1);
 
 }
