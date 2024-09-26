@@ -26,7 +26,7 @@ void accelerateDown(Snake *pSnake);
 void growSnake(Snake *pSnake);
 void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int board_height, int board_x, int board_y);
 void closeSnake(Snake *pSnake);
-void avoidCollision(Snake *pSnake, int board_width, int board_height, int board_x, int board_y);
+int avoidCollision(Snake *pSnake, int board_width, int board_height, int board_x, int board_y);
 
 int checkSelfCollision(Snake *pSnake);
 

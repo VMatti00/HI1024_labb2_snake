@@ -4,7 +4,7 @@
 #include "snake.h"
 #include <math.h>
 #include <stdio.h>
-#define SPEED 5
+#define SPEED 10
 
 Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y){
     Snake *pSnake = malloc(sizeof(struct snake));
@@ -18,6 +18,7 @@ Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height,
         free(pSnake);
         return NULL;
     }
+    
     segment->rect.h = 20;
     segment->rect.w = 20;
     segment->rect.y = y;
@@ -31,6 +32,7 @@ Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height,
     pSnake->vx = 0;
     pSnake->vy = 0;
     pSnake->pRenderer = pRenderer;
+    
 
     return pSnake;
 }
@@ -42,6 +44,7 @@ void drawSnake(Snake *pSnake){
         SDL_RenderFillRect(pSnake->pRenderer, &current->rect);
         current = current->pNext;
     }
+
 }
 
 int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, int board_y){
@@ -66,6 +69,12 @@ int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, i
         current = current->pNext;
     }
     avoidCollision(pSnake, board_width, board_height, board_x, board_y);
+    if (pSnake->pHead->rect.x < board_x +1 || pSnake->pHead->rect.x > board_width + pSnake->pHead->rect.w ||
+        pSnake->pHead->rect.y < board_y +1  || pSnake->pHead->rect.y > board_height + pSnake->pHead->rect.h)
+    {
+
+        return 0;
+    }
 
     return 1;
 }
@@ -125,9 +134,14 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
             pSnake->vx = 0;  
         }
     }
+
+    avoidCollision(pSnake, board_width, board_height, board_x, board_y);
+
+
 }
 
 void turnLeft(Snake *pSnake){
+   
     pSnake->vy = 0;
     pSnake->vx = -SPEED;
 }
@@ -146,12 +160,13 @@ void accelerateDown(Snake *pSnake){
 }
 
 
-void avoidCollision(Snake *pSnake, int board_width, int board_height, int board_x, int board_y){
+int avoidCollision(Snake *pSnake, int board_width, int board_height, int board_x, int board_y){
     if (pSnake->pHead->rect.x < board_x + 1 || pSnake->pHead->rect.x > board_width + 25 ||
         pSnake->pHead->rect.y < board_y + 1 || pSnake->pHead->rect.y > board_height + 25)
     {
         pSnake->vx = 0;
         pSnake->vy = 0;
-        // return 0;
+
+        return 0;
     }
 }
