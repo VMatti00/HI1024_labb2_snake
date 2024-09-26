@@ -14,7 +14,15 @@ typedef struct snake{
     SnakeSegment *pHead;
     SnakeSegment *pTail;
     SDL_Renderer *pRenderer;
+    int direction;
 }Snake;
+
+typedef enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+}Direction;
 
 Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y);
 int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, int board_y);

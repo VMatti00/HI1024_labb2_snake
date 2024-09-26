@@ -112,7 +112,7 @@ HighScore* readHighScores(int *numScores) {
         return NULL;
     }
 
-    HighScore *scores = malloc(100 * sizeof(HighScore)); // Allocate memory for 100 scores
+    HighScore *scores = malloc(100 * sizeof(HighScore)); 
     *numScores = 0;
 
     while (fscanf(file, "%49s %d", scores[*numScores].name, &scores[*numScores].score) == 2) {
@@ -135,13 +135,7 @@ void saveScore(const char *playerName, int score) {
 
 
 void drawMenu(Game *pGame) {
-    // Print the current working directory
-    char cwd[1024];
-    if (_getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("Current working directory: %s\n", cwd);
-    } else {
-        perror("_getcwd() error");
-    }
+
 
 
     TTF_Font *font = TTF_OpenFont(FONT_SRC, FONT_SIZE);
@@ -323,8 +317,6 @@ void run_game(Game *pGame)
             break;
         }
         moveSnakeAI(pGame->pSnakeAI, foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
-        printf("FOODXY: %d, %d\n",foodX(pGame->pFood), foodY(pGame->pFood));
-        printf("SNAKEXY: %d, %d\n",pGame->pSnakeAI->pHead->rect.x, pGame->pSnakeAI->pHead->rect.y);
         if(!updateSnake(pGame->pSnakeAI, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
             printf("Game over\n");
             break;
