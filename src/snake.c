@@ -4,6 +4,7 @@
 #include "snake.h"
 #include <math.h>
 #include <stdio.h>
+#include <windows.h>
 #define SPEED 5
 
 Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y){
@@ -76,6 +77,7 @@ int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, i
         return 0;
     }
 
+
     return 1;
 }
 
@@ -135,6 +137,7 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
         }
     }
 
+    Sleep(10);
     avoidCollision(pSnake, board_width, board_height, board_x, board_y);
 
 
