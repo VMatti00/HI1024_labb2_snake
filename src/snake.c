@@ -4,7 +4,7 @@
 #include "snake.h"
 #include <math.h>
 #include <stdio.h>
-#define SPEED 10
+#define SPEED 5
 
 Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y){
     Snake *pSnake = malloc(sizeof(struct snake));
@@ -18,7 +18,7 @@ Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height,
         free(pSnake);
         return NULL;
     }
-    
+
     segment->rect.h = 20;
     segment->rect.w = 20;
     segment->rect.y = y;
@@ -32,7 +32,7 @@ Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height,
     pSnake->vx = 0;
     pSnake->vy = 0;
     pSnake->pRenderer = pRenderer;
-    
+
 
     return pSnake;
 }
@@ -68,7 +68,7 @@ int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, i
 
         current = current->pNext;
     }
-    avoidCollision(pSnake, board_width, board_height, board_x, board_y);
+    // avoidCollision(pSnake, board_width, board_height, board_x, board_y);
     if (pSnake->pHead->rect.x < board_x +1 || pSnake->pHead->rect.x > board_width + pSnake->pHead->rect.w ||
         pSnake->pHead->rect.y < board_y +1  || pSnake->pHead->rect.y > board_height + pSnake->pHead->rect.h)
     {
@@ -114,7 +114,7 @@ void closeSnake(Snake *pSnake){
 void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int board_height, int board_x, int board_y) {
     SDL_Rect head = pSnake->pHead->rect;
 
-    int dist_x = food_x - head.x;   
+    int dist_x = food_x - head.x;
     int dist_y = food_y - head.y;
 
     if (abs(dist_x) > abs(dist_y)) {
@@ -131,7 +131,7 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
             pSnake->vx = 0;
         } else if (dist_y < 0) {
             accelerate(pSnake);
-            pSnake->vx = 0;  
+            pSnake->vx = 0;
         }
     }
 
@@ -141,7 +141,7 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
 }
 
 void turnLeft(Snake *pSnake){
-   
+
     pSnake->vy = 0;
     pSnake->vx = -SPEED;
 }
