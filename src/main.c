@@ -165,6 +165,8 @@ void drawMenu(Game *pGame) {
 
     TTF_CloseFont(font);
 
+    
+
     int close_requested = 0;
     SDL_Event eventGame;
 
@@ -341,6 +343,9 @@ void run_game(Game *pGame)
     printf("Enter your name: ");
     const char playerName[50];
     scanf("%s", playerName);
+
+
+    
 
     endGame(pGame, playerName, pGame->pSnake->length);
 }

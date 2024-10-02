@@ -2,7 +2,6 @@
 #define snake_h
 
 typedef struct snake_segment{
-
     SDL_Rect rect; 
     struct snake_segment *pNext;
 }SnakeSegment;
