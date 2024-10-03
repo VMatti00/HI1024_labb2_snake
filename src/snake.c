@@ -5,7 +5,29 @@
 #include <math.h>
 #include <stdio.h>
 #include <windows.h>
-#define SPEED 13
+#define SPEED 5
+
+struct snake_segment{
+    SDL_Rect rect; 
+    struct snake_segment *pNext;
+};
+
+struct snake{
+    float x, y, vy, vx;
+    int length;
+    int window_width,window_height;
+    SnakeSegment *pHead;
+    SnakeSegment *pTail;
+    SDL_Renderer *pRenderer;
+    int direction;
+};
+
+typedef enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+}Direction;
 
 Snake *createSnake(SDL_Renderer *pRenderer, int window_width, int window_height, int x, int y){
     Snake *pSnake = malloc(sizeof(struct snake));
@@ -72,7 +94,6 @@ int updateSnake(Snake *pSnake, int board_width, int board_height, int board_x, i
 
         current = current->pNext;
     }
-    // avoidCollision(pSnake, board_width, board_height, board_x, board_y);
     if (pSnake->pHead->rect.x < board_x +1 || pSnake->pHead->rect.x > board_width + pSnake->pHead->rect.w ||
         pSnake->pHead->rect.y < board_y +1  || pSnake->pHead->rect.y > board_height + pSnake->pHead->rect.h)
     {
@@ -145,8 +166,7 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
                 turnLeft(pSnake);
                 pSnake->vy = 0;
             }
-            // turnLeft(pSnake);
-            // pSnake->vy = 0;
+
         }
     } else {
         if (dist_y > 0) {
@@ -159,8 +179,7 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
                 accelerateDown(pSnake);
                 pSnake->vx = 0;
             }
-            // accelerateDown(pSnake);
-            // pSnake->vx = 0;
+
         } else if (dist_y < 0) {
             if(pSnake->direction == DOWN){
                 turnLeft(pSnake);
@@ -171,12 +190,9 @@ void moveSnakeAI(Snake *pSnake, int food_x, int food_y, int board_width, int boa
                 accelerate(pSnake);
                 pSnake->vx = 0;
             }
-            // accelerate(pSnake);
-            // pSnake->vx = 0;
         }
     }
 
-    Sleep(20);
     avoidCollision(pSnake, board_width, board_height, board_x, board_y);
 
 
@@ -188,8 +204,7 @@ void turnLeft(Snake *pSnake){
         pSnake->vx = -SPEED;
         pSnake->direction = LEFT;
     }
-    // pSnake->vy = 0;
-    // pSnake->vx = -SPEED;
+
 }
 void turnRight(Snake *pSnake){
     if(pSnake->vx == 0){
@@ -197,8 +212,7 @@ void turnRight(Snake *pSnake){
         pSnake->vx = SPEED;
         pSnake->direction = RIGHT;
     }
-    // pSnake->vy = 0;
-    // pSnake->vx = SPEED;
+
 }
 
 void accelerate(Snake *pSnake){
@@ -207,8 +221,7 @@ void accelerate(Snake *pSnake){
         pSnake->vy = -SPEED;
         pSnake->direction = UP;
     }
-    // pSnake->vx = 0;
-    // pSnake->vy = -SPEED;
+
 }
 void accelerateDown(Snake *pSnake){
     if(pSnake->vy == 0){
@@ -216,8 +229,7 @@ void accelerateDown(Snake *pSnake){
         pSnake->vy = SPEED;
         pSnake->direction = DOWN;
     }
-    // pSnake->vx = 0;
-    // pSnake->vy = SPEED;
+
 }
 
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_ttf.h>
@@ -18,10 +19,11 @@
 #define HIGHSCORE_FILE "./resources/highscores.txt"
 
 
-typedef struct highscore {
+struct highscore {
     char name[50];
     int score;
-} HighScore;
+};
+typedef struct highscore HighScore;
 
 struct game
 {
@@ -50,6 +52,7 @@ void showHighScore(Game *pGame);
 void saveScore(const char *playerName, int score);
 void drawMenu(Game *pGame);
 void updateScore(Snake *pSnake, Game *pGame, int isAi);
+void endGame(Game *pGame);
 
 
 int checkCollision(SDL_Rect pSnake, SDL_Rect pFood);
@@ -127,8 +130,6 @@ void saveScore(const char *playerName, int score) {
 
 
 void drawMenu(Game *pGame) {
-
-
 
     TTF_Font *font = TTF_OpenFont(FONT_SRC, FONT_SIZE);
     if (!font) {
@@ -265,8 +266,14 @@ void showHighScore(Game *pGame) {
     }
 }
 
-void endGame(Game *pGame, const char *playerName, int score) {
-    saveScore(playerName, score);
+void endGame(Game *pGame) {
+    char playerName[50];
+    
+    printf("Game over\n");
+    printf("Score: %d\n", pGame->pSnake->length);
+    printf("Enter your name: ");
+    scanf("%s", playerName);
+    saveScore(playerName, pGame->pSnake->length);
     
     
     pGame->pSnake = createSnake(pGame->pRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -281,7 +288,7 @@ void endGame(Game *pGame, const char *playerName, int score) {
 void run_game(Game *pGame)
 {
     srand(time(NULL));
-
+    int acceptInputs = 1;
     int close_requested = 0;
     SDL_Event eventGame;
     
@@ -289,17 +296,15 @@ void run_game(Game *pGame)
     while (!close_requested){
         while (SDL_PollEvent(&eventGame)){
             if (eventGame.type == SDL_QUIT) close_requested = 1;
-            else {
+            else if(acceptInputs && eventGame.type == SDL_KEYDOWN){
                 handleInput(pGame, &eventGame);
             }
         }
         if(!updateSnake(pGame->pSnake, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
-            printf("Game over\n");
             break;
         }
         moveSnakeAI(pGame->pSnakeAI, foodX(pGame->pFood), foodY(pGame->pFood), getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard));
         if(!updateSnake(pGame->pSnakeAI, getBoardWidth(pGame->pBoard), getBoardHeight(pGame->pBoard), getBoardX(pGame->pBoard), getBoardY(pGame->pBoard))){
-            printf("Game over\n");
             break;
         }
         SDL_Rect snakeHeadRectAI = pGame->pSnakeAI->pHead->rect;
@@ -325,7 +330,6 @@ void run_game(Game *pGame)
         drawSnake(pGame->pSnake);
         drawFood(pGame->pFood);
 
-        
         if (pGame->aiScoreTexture) {
             SDL_Rect aiTextRect = {10, 10, pGame->aiScoreTextWidth, pGame->aiScoreTextHeight};
             SDL_RenderCopy(pGame->pRenderer, pGame->aiScoreTexture, NULL, &aiTextRect);
@@ -338,16 +342,10 @@ void run_game(Game *pGame)
         SDL_RenderPresent(pGame->pRenderer);
         SDL_Delay(16);
     }
-    printf("Game over\n");
-    printf("Score: %d\n", pGame->pSnake->length);
-    printf("Enter your name: ");
-    const char playerName[50];
-    scanf("%s", playerName);
-
+    acceptInputs = 0;
 
     
-
-    endGame(pGame, playerName, pGame->pSnake->length);
+    endGame(pGame);
 }
 
 

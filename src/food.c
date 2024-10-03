@@ -5,10 +5,16 @@
 #include <time.h>
 
 
+struct food
+{
+    SDL_Renderer *pRenderer;
+    SDL_Rect rect;
+};
+
 
 
 Food *createFood(SDL_Renderer *pRenderer, int board_width, int board_height, int board_x, int board_y){
-    Food *pFood = malloc(sizeof(struct food));
+    Food *pFood = malloc(sizeof(Food));
     if (!pFood) {
         printf("Failed to allocate memory for food\n");
         return NULL;
@@ -26,11 +32,6 @@ void drawFood(Food *pFood){
 }
 
 void repositionFood(Food *pFood, int board_width, int board_height, int board_x, int board_y){
-    
-    // pFood->rect.x = (rand() % (board_width+25) - board_x +1 ) + board_x;
-    // pFood->rect.y = (rand() % (board_height+25) - board_y +1 ) + board_y;
-    // pFood->rect.x = (rand() % (board_width +20) + board_x + 1);
-    // pFood->rect.y = (rand() % (board_height - 20) + board_y + 1);
 
     pFood->rect.x = (rand() % (board_width - board_x + 1) + board_x );
     pFood->rect.y = (rand() % (board_height - board_y + 1) + board_y );

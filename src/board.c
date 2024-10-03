@@ -3,6 +3,11 @@
 #include <stdio.h>
 #include "board.h"
 
+struct board {
+    SDL_Rect rect;
+    SDL_Renderer *pRenderer;
+};
+
 Board *createBoard(SDL_Renderer *pRenderer, int window_width, int window_height) {
     Board *pBoard = malloc(sizeof(Board));
     pBoard->pRenderer = pRenderer;
